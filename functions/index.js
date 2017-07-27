@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
@@ -21,26 +20,90 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require('firebase-functions');
 
-// The Firebase Admin SDK to access the Firebase Realtime Database. 
+// The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 // [END import]
 
 // [START makeUppercase]
 // [START makeUppercaseTrigger]
-exports.createFriendship = functions.database.ref('/events/friendship/{newEvent}')
-    .onWrite(event => {
-// [END makeUppercaseTrigger]
-      // [START makeUppercaseBody]
-      // Grab the current value of what was written to the Realtime Database.
-      const original = event.data.val();
-      console.log('Create friendship', event.params, original);
-      const uppercase = original.to.toUpperCase();
-      // You must return a Promise when performing asynchronous tasks inside a Functions such as
-      // writing to the Firebase Realtime Database.
-      // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
-      return Object.assign({}, original, { to: uppercase });
-      // [END makeUppercaseBody]
-    });
+exports.createFriendship = functions.database
+  .ref('/events/friendship/{newEvent}')
+  .onWrite(event => {
+    // [END makeUppercaseTrigger]
+    // [START makeUppercaseBody]
+
+    const original = event.data.val();
+
+    switch (original.action) {
+      case 'CREATE_FRIENDSHIP':
+        return createFriendShip(original);
+      case 'ACCEPT_FRIENDSHIP':
+        return acceptFriendShip(original);
+    }
+    // [END makeUppercaseBody]
+  });
 // [END makeUppercase]
 // [END all]
+
+function createFriendShip(eventData) {
+  const friendshipRef = admin.database().ref('/friendship');
+
+  const newFriendship = {
+    to: eventData.to,
+    from: eventData.from,
+    status: 'PENDING'
+  };
+
+  return friendshipRef.push(newFriendship);
+}
+
+function acceptFriendShip(eventData) {
+  const dbRef = admin.database().ref('/friendship');
+
+  return new Promise(function(resolve, reject) {
+    dbRef.once('value', function(snapshot) {
+      let friendships = [];
+
+      snapshot.forEach(function(childSnapshot, kek, two) {
+        var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
+
+        friendships.push(
+            Object.assign({}, childData, {$key: childKey})
+        );
+      });
+
+      console.log('friendships ', friendships);
+      console.log('eventData', eventData)
+      const friendShipToAccept = getFriendship(
+        friendships,
+        eventData.friend_one,
+        eventData.friend_two,
+        'PENDING'
+      );
+      console.log('friendShipToAccept ', friendShipToAccept);
+      const key = friendShipToAccept.$key;
+      console.log('key ', key)
+
+      admin.database().ref(`/friendship/${key}`).update({
+        status: 'ACCEPTED'
+      });
+    });
+
+    resolve('kek');
+  });
+}
+
+function getFriendship(friendships, friendOne, friendTwo, status) {
+  const friendship = friendships.filter(
+    friendship =>
+      friendship.status === status &&
+      ((friendship.to === friendOne && friendship.from === friendTwo) ||
+        (friendship.from === friendOne && friendship.to === friendTwo))
+  );
+
+  const [first, ...rest] = friendship;
+
+  return first;
+}
