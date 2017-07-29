@@ -5,7 +5,7 @@ const getUserByUid = require('./helpers/get-user-by-uid');
 
 module.exports = function (app) {
   console.log('app');
-  app.get('/pendingFriends', (req, res) => {
+  app.get('/rejectedInvites', (req, res) => {
     const userUid = req.user.uid;
 
     const friendshipRef = adminSdk.database().ref('/friendship');
@@ -14,7 +14,6 @@ module.exports = function (app) {
       .then((friendships) => {
         const pendingFriendships =
           friendships.filter((friendship) =>
-            // TODO здесь хороший вопрос какие именно rejected запросы нужно показывать: входящие или исходящие
             friendship.uidFrom === userUid && friendship.status === 'REJECTED'
           );
 

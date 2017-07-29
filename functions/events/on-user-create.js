@@ -1,20 +1,15 @@
 const functions = require('firebase-functions');
+const adminSdk = require('../core/admin-sdk');
 
-let adminSdk;
+module.exports = functions.auth.user().onCreate(event => {
+  const usersRef = adminSdk.database().ref('/users');
 
-module.exports = function (_adminSdk) {
-  adminSdk = _adminSdk;
+  const user = event.data;
+  const newUser = {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName
+  };
 
-  return functions.auth.user().onCreate(event => {
-    const usersRef = adminSdk.database().ref('/users');
-
-    const user = event.data;
-    const newUser = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName
-    };
-
-    return usersRef.push(newUser);
-  });
-};
+  return usersRef.push(newUser);
+});
