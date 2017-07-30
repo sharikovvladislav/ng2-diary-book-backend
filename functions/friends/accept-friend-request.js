@@ -5,7 +5,6 @@ const getUserByEmail = require('./helpers/get-user-by-email');
 
 
 module.exports = function (app) {
-  console.log('app');
   app.put('/friends', (req, res) => {
     const friendshipRef = adminSdk.database().ref('/friendship');
 

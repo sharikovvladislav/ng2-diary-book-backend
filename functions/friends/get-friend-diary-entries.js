@@ -4,7 +4,6 @@ const getList = require('../core/get-list');
 const isFriends = require('./helpers/is-friends');
 
 module.exports = function (app) {
-  console.log('app');
   app.get('/friends/diaryEntries/:friendUid', (req, res) => {
     const userUid = req.user.uid;
     const friendUid = req.params.friendUid;

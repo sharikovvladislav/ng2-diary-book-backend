@@ -1,8 +1,6 @@
 const adminSdk = require('../core/admin-sdk');
-const functions = require('firebase-functions');
 
 module.exports = function (app) {
-  console.log('app');
   app.post('/friends/createFriendship', (req, res) => {
     const usersRef = adminSdk.database().ref('/users');
 

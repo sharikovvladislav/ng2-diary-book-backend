@@ -40,6 +40,7 @@ require('./friends/get-pending-outcome-invites')(app);
 require('./friends/get-friends-list')(app);
 require('./friends/accept-friend-request')(app);
 require('./friends/get-friend-diary-entries')(app);
+require('./friends/get-my-diary-entries')(app);
 
 exports.app = functions.https.onRequest(app);
 

@@ -4,7 +4,6 @@ const getList = require('../core/get-list');
 const getUserByUid = require('./helpers/get-user-by-uid');
 
 module.exports = function (app) {
-  console.log('app');
   app.get('/rejectedInvites', (req, res) => {
     const userUid = req.user.uid;
 
