@@ -41,6 +41,7 @@ require('./friends/get-friends-list')(app);
 require('./friends/accept-friend-request')(app);
 require('./friends/get-friend-diary-entries')(app);
 require('./friends/get-my-diary-entries')(app);
+require('./friends/update-diary-entry')(app);
 
 exports.app = functions.https.onRequest(app);
 
