@@ -1,27 +1,27 @@
 const adminSdk = require('../core/admin-sdk');
 
-module.exports = function (app) {
+module.exports = function(app) {
   app.post('/friends/createFriendship', (req, res) => {
     const usersRef = adminSdk.database().ref('/users');
 
-    usersRef.once('value').then(function (snapshot) {
+    usersRef.once('value').then(function(snapshot) {
       let users = [];
 
-      snapshot.forEach(function (childSnapshot) {
+      snapshot.forEach(function(childSnapshot) {
         const childKey = childSnapshot.key;
         const childData = childSnapshot.val();
 
-        users.push(
-          Object.assign({}, childData, {$key: childKey})
-        );
+        users.push(Object.assign({}, childData, { $key: childKey }));
       });
 
       const targetFriendEmail = req.body.targetEmail;
-      const targetUidSearchResults = users.filter((user) => user.email === targetFriendEmail);
+      const targetUidSearchResults = users.filter(
+        user => user.email === targetFriendEmail
+      );
 
       if (!targetUidSearchResults) {
         return res.send({
-          code: 'NO_SUCH_EMAIL'
+          code: 'NO_SUCH_EMAIL',
         });
       }
 
@@ -32,18 +32,17 @@ module.exports = function (app) {
 
       const friendshipRef = adminSdk.database().ref('/friendship');
 
-      friendshipRef.push({
-        uidTo: targetFriendUid,
-        uidFrom: fromFriendUid,
-        status: 'PENDING'
-      })
+      friendshipRef
+        .push({
+          uidTo: targetFriendUid,
+          uidFrom: fromFriendUid,
+          status: 'PENDING',
+        })
         .then(() => {
           res.send({
-            code: 'FRIEND_REQUEST_SENT'
+            code: 'FRIEND_REQUEST_SENT',
           });
         });
-
-
     });
   });
 };

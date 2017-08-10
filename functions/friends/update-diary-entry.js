@@ -16,7 +16,7 @@ module.exports = function(app) {
 
       if (diaryEntriesToUpdateSearchResults.length === 0) {
         return res.send({
-          code: 'NO_SUCH_DIARY_ENTRY'
+          code: 'NO_SUCH_DIARY_ENTRY',
         });
       }
 
@@ -26,7 +26,7 @@ module.exports = function(app) {
         .update(diaryEntryNewBody)
         .then(() =>
           res.send({
-            code: 'DIARY_ENTRY_UPDATED'
+            code: 'DIARY_ENTRY_UPDATED',
           })
         );
     });

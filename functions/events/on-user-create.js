@@ -8,7 +8,7 @@ module.exports = functions.auth.user().onCreate(event => {
   const newUser = {
     uid: user.uid,
     email: user.email,
-    displayName: user.displayName
+    displayName: user.displayName,
   };
 
   return usersRef.push(newUser);
