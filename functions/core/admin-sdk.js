@@ -1,5 +1,5 @@
-const adminSdk = require('firebase-admin');
-const functions = require('firebase-functions');
+const adminSdk = require("firebase-admin");
+const functions = require("firebase-functions");
 
 let isInitialised = false;
 
