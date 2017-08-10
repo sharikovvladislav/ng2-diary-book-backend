@@ -1,0 +1,31 @@
+{
+  "name": "diary-app-functions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharikovvladislav/ng2-diary-book-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sharikovvladislav/ng2-diary-book-backend/issues"
+  },
+  "homepage": "https://github.com/sharikovvladislav/ng2-diary-book-backend#readme"
+}
