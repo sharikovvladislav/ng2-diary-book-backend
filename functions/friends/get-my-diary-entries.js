@@ -18,7 +18,9 @@ module.exports = function(app) {
       });
 
       res.send({
-        items: sortedDiaryEntries,
+        items: sortedDiaryEntries.map(diaryEntry =>
+          Object.assign({}, { tags: [] }, diaryEntry)
+        )
       });
     });
   });
