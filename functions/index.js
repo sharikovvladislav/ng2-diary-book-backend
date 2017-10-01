@@ -17,7 +17,7 @@
 
 const functions = require('firebase-functions');
 const admin = require('./core/admin-sdk');
-const cors = require('cors')({origin: true});
+const cors = require('cors')({ origin: true });
 
 const express = require('express');
 const cookieParser = require('cookie-parser')();
@@ -30,7 +30,7 @@ app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
 app.get('/hello', (req, res) => {
-  res.send({text: `Hello ${req.user.name}`, user: req.user});
+  res.send({ text: `Hello ${req.user.name}`, user: req.user });
 });
 
 require('./friends/send-friend-request')(app);
@@ -42,6 +42,10 @@ require('./friends/accept-friend-request')(app);
 require('./friends/get-friend-diary-entries')(app);
 require('./friends/get-my-diary-entries')(app);
 require('./friends/update-diary-entry')(app);
+require('./tags/add-tag')(app);
+require('./tags/edit-tag')(app);
+require('./tags/delete-tag')(app);
+require('./tags/get-tags-list')(app);
 
 exports.app = functions.https.onRequest(app);
 
