@@ -1,6 +1,7 @@
 const adminSdk = require('../core/admin-sdk');
 const functions = require('firebase-functions');
 const getList = require('../core/get-list');
+const moment = require('moment');
 
 module.exports = function(app) {
   app.post('/my-tags', (req, res) => {
@@ -8,6 +9,7 @@ module.exports = function(app) {
     const tagsRef = adminSdk.database().ref(tagsRefPath);
     const tagBody = req.body;
     tagsRef.push({
+      createDate: moment().toISOString(),
       name: tagBody.name
     });
 
