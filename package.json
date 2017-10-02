@@ -7,8 +7,17 @@
     "husky": "^0.14.3",
     "lint-staged": "^4.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/express": "^4.0.37",
+    "@types/firebase": "^2.4.32",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^8.0.31",
+    "typescript": "^2.5.3"
+  },
   "scripts": {
+    "deploy": "npm run tsc && firebase deploy",
+    "tsc": "tsc",
+    "clear": "rimraf \"**/*+(.d.ts|.map)\" ",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged"
   },
