@@ -4,7 +4,7 @@ module.exports = (tagIds, userId) => {
   const tagsRefPath = `/tags/${userId}`;
   const tagsRef = adminSdk.database().ref(tagsRefPath);
 
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     tagsRef.once('value').then(function(tagsSnapshot) {
       let tagsList = [];
 

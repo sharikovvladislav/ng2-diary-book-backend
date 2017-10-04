@@ -10,8 +10,8 @@
   "devDependencies": {
     "@types/express": "^4.0.37",
     "@types/firebase": "^2.4.32",
-    "@types/moment": "^2.13.0",
     "@types/node": "^8.0.31",
+    "ng2-diary-book-shared-models": "^1.0.9",
     "typescript": "^2.5.3"
   },
   "scripts": {
