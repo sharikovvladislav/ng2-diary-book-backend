@@ -17,7 +17,7 @@ module.exports = function(app: Application) {
 
     getList(diaryEntriesRef).then((diaryEntries: DiaryEntryDb[]) => {
       const promises = diaryEntries.map((diaryEntry: DiaryEntryDb) =>
-        getTagsByIds(diaryEntry.tagIds, req.user.uid),
+        getTagsByIds(diaryEntry.tagIds || [], req.user.uid),
       );
 
       const preparedDiaryEntries = diaryEntries.map(entry => ({

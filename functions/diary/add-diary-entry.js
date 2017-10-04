@@ -1,6 +1,4 @@
 const adminSdk = require('../core/admin-sdk');
-const functions = require('firebase-functions');
-const getList = require('../core/get-list');
 const generateParamsError = require('../core/generate-params-error');
 const moment = require('moment');
 

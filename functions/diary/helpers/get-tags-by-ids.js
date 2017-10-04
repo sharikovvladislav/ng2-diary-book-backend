@@ -1,6 +1,6 @@
 const adminSdk = require('../../core/admin-sdk');
 
-module.exports = (tagIds, userId) => {
+module.exports = (tagIds = [], userId) => {
   const tagsRefPath = `/tags/${userId}`;
   const tagsRef = adminSdk.database().ref(tagsRefPath);
 
