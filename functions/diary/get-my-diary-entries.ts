@@ -12,35 +12,47 @@ import { ListResponse } from 'ng2-diary-book-shared-models';
 module.exports = function(app: Application) {
   app.get('/diaryEntries', (req: ExtendedRequest, res: Response) => {
     const userUid = req.user.uid;
+    const tagNames = Array.isArray(req.query.tagNames) ? req.query.tagNames : (!!req.query.tagNames ? [req.query.tagNames] : []);
 
     const diaryEntriesRef = adminSdk.database().ref(`/diaryEntries/${userUid}`);
 
     getList(diaryEntriesRef).then((diaryEntries: DiaryEntryDb[]) => {
       const promises = diaryEntries.map((diaryEntry: DiaryEntryDb) =>
-        getTagsByIds(diaryEntry.tagIds || [], req.user.uid),
+        getTagsByIds(diaryEntry.tagIds || [], req.user.uid)
       );
 
       const preparedDiaryEntries = diaryEntries.map(entry => ({
         $key: entry.$key,
         date: entry.date,
         message: entry.message,
-        tags: entry.tags,
+        tags: entry.tags
       }));
 
       Promise.all(promises).then((tagIdsArray: Tag[][]) => {
         const taggedDiaryEntries: DiaryEntry[] = preparedDiaryEntries.map(
           (diaryEntry: DiaryEntry, index: number) =>
-            Object.assign({}, diaryEntry, { tags: tagIdsArray[index] }),
+            Object.assign({}, diaryEntry, { tags: tagIdsArray[index] })
         );
 
-        const sortedDiaryEntries = taggedDiaryEntries.sort(
+        const onlyNeededDiaryEntries =
+          tagNames.length > 0
+            ? taggedDiaryEntries.filter((diaryEntry: DiaryEntry) =>
+                tagNames.every((tagName: string) =>
+                  (diaryEntry.tags || [])
+                    .map(tag => tag.name)
+                    .some(innerTagName => innerTagName === tagName)
+                )
+              )
+            : taggedDiaryEntries;
+
+        const sortedDiaryEntries = onlyNeededDiaryEntries.sort(
           (a: DiaryEntry, b: DiaryEntry) => {
             if (moment(a.date).unix() > moment(b.date).unix()) {
               return -1;
             } else {
               return 1;
             }
-          },
+          }
         );
 
         const response: ListResponse<DiaryEntry> = {
